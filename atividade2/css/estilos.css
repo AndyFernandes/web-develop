@@ -4,6 +4,11 @@ body {
     padding: 0;
 }
 
+a,
+li {
+    text-decoration: none;
+}
+
 
 /*   MENU   */
 
@@ -11,6 +16,9 @@ body {
     position: fixed;
     width: 100%;
     background-color: #333;
+    top: 0;
+    z-index: 1;
+    /* display: flex; */
 }
 
 ul {
@@ -24,7 +32,7 @@ li a {
     display: block;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+    padding: 20px;
     text-decoration: none;
 }
 
@@ -40,20 +48,115 @@ li a:hover {
     background-color: red;
 }
 
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
 .dropdown-content {
     display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 160px;
+    box-shadow: 0px 8px 6px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    text-align: justify;
+}
+
+.dropdown-content a:hover {
+    background-color: #eee;
+    text-align: justify;
 }
 
 
 /* SECTION */
 
 .banner {
-    margin-top: 5%;
+    margin-top: 7%;
     display: block;
     margin-left: auto;
     margin-right: auto;
     border-radius: 20px;
-    box-shadow: 10px 10px 5px #888;
-    height: 50%;
-    width: 50%;
+    box-shadow: 5px 5px 5px #222;
+    height: 30%;
+    width: 60%;
+}
+
+.centralizado {
+    margin-top: 4%;
+    position: relative;
+    display: flex;
+}
+
+.centralizado .secoes {
+    position: relative;
+    display: block;
+    float: left;
+    width: 25%;
+    height: 30%;
+    background-color: #3c4756;
+    color: white;
+    text-align: center;
+    margin-left: 8%;
+    border-radius: 5%;
+    padding: 1%;
+    z-index: 0;
+}
+
+.secoes:first-child {
+    margin-left: 2%;
+}
+
+.botao {
+    background-color: white;
+    color: #A4F;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 13px;
+    width: 25%;
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+
+/* TEXTO */
+
+.texto {
+    /* position: absolute; */
+    left: 0;
+    margin-top: 5%;
+    margin-left: 5%;
+}
+
+.titulo {
+    padding-top: 2%;
+    border-bottom: 3px solid orange;
+    position: relative;
+    /* float: none; */
+    /* display: block; */
+    /* As I've said, adding this allowed me to do so, but the result was far from ideal! */
+}
+
+#coordenacao {
+    position: relative;
+    float: right;
+    text-align: right;
+    margin-bottom: 8%;
+}
+
+
+/* FOOTER */
+
+footer {
+    position: fixed;
+    bottom: 0;
+    background-color: #111;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    z-index: 1;
 }
