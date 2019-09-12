@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <title>Cadastro aluno</title>
+    <meta charset="utf8">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Sistema de Controle de Alunos</h1>
+
+        <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
+        <!-- FORMULARIO -->
+        <form class="container border border-primary">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="matricula"><b>Matrícula</b></label>
+                    <input type="text" class="form-control" id="matricula" placeholder="Adicione a matrícula do aluno">
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="nome"><b>Nome</b></label>
+                    <input type="text" class="form-control" id="nome" placeholder="Adicione o nome do aluno">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col-4">
+                    <label for="data_nasc"><b>Data de Nascimento</b></label>
+                    <input type="date" class="form-control" id="matricula">
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="email"><b>Email</b></label>
+                    <input type="text" class="form-control" id="email" placeholder="Adicione o email do aluno">
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="ddd"><b>DDD</b></label>
+                    <input type="text" class="form-control" id="ddd" placeholder="DDD">
+                </div>
+
+                <div class="form-group col-4">
+                    <label for="telefone"><b>Telefone</b></label>
+                    <input type="text" class="form-control" id="telefone" placeholder="Adicione o telefone do aluno">
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="operadoras"><b>Operadores</b></label>
+                    <select class="custom-select" id="operadoras">
+                            <option selected value="oi">Oi</option>
+                            <option value="vivo">Vivo</option>
+                            <option value="claro">Claro</option>
+                            <option value="tim">Tim</option>
+                          </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="campus"><b>Campus</b></label>
+                    <select class="custom-select" id="campus">
+                                    <option selected value="Pici">Pici</option>
+                                    <option value="Porangabussu">Porangabussu</option>
+                                    <option value="Benfica">Benfica</option>
+                    </select>
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="curso"><b>Curso</b></label>
+                    <select class="custom-select" id="curso">
+                                        <!-- <option selected value="Pici">Pici</option>
+                                        <option value="Porangabussu">Porangabussu</option>
+                                        <option value="Benfica">Benfica</option> -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="card-header row">
+                <div class="float-right">
+                    <button class="btn btn-light" type="button">Limpar</button>
+                    <button type="submit" class="btn btn-light">Inserir</button>
+
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <br><br>
+        <hr>
+        <br>
+
+        <!-- TABELA -->
+        <table class="table border border-secondary">
+            <thead class="thead-light">
+                <tr>
+                    <th scope="col-3">Matrícula</th>
+                    <th scope="col-6">Nome</th>
+                    <th scope="col-3">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td>Otto</td>
+                    <td>@mdo</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td>Thornton</td>
+                    <td>@fat</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td>the Bird</td>
+                    <td>@twitter</td>
+                </tr> -->
+            </tbody>
+        </table>
+
+    </div>
+
+
+
+
+    <!-- MODAL PRA REMOÇÃO -->
+    <div class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+
+
+</html>
