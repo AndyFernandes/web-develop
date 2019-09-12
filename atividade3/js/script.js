@@ -35,9 +35,25 @@ campi_cursos = {
 $('#remove').modal('show');
 
 var selectCampus = document.getElementById('campus');
-console.log(selectCampus);
-// selectCampus.onchange = changeSelect(this);
 
-// function changeSelect(evento) {
-//     console.log(evento);
-// }
+function validar_matricula(matricula) {}
+
+function validar_ddd(ddd) {}
+
+function validar_telefone(telefone) {}
+
+function validar_email() {}
+
+function validar_nome() {}
+
+function validar_data_nasc() {}
+
+function changeSelect(evento) {
+    console.log(evento.value);
+}
+
+function inserir() {
+
+}
+
+function limpar() {}
