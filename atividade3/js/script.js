@@ -31,3 +31,13 @@ campi_cursos = {
     'Pici': ['Computação', 'Matemática', 'Geologia'],
     'Benfica': ['Letras', 'Filosofia', 'Direito']
 }
+
+$('#remove').modal('show');
+
+var selectCampus = document.getElementById('campus');
+console.log(selectCampus);
+// selectCampus.onchange = changeSelect(this);
+
+// function changeSelect(evento) {
+//     console.log(evento);
+// }

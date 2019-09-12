@@ -80,20 +80,18 @@
                 <div class="form-group col-2">
                     <label for="curso"><b>Curso</b></label>
                     <select class="custom-select" id="curso">
-                                        <!-- <option selected value="Pici">Pici</option>
-                                        <option value="Porangabussu">Porangabussu</option>
-                                        <option value="Benfica">Benfica</option> -->
+                                        <option selected value="Computação">Computação</option>
+                                        <option value="Matemática">Matemática</option>
+                                        <option value="Geologia">Geologia</option>
                     </select>
                 </div>
             </div>
 
             <div class="card-header row">
-                <div class="float-right">
-                    <button class="btn btn-light" type="button">Limpar</button>
-                    <button type="submit" class="btn btn-light">Inserir</button>
-
-
-                </div>
+                <!-- <div class="modal-footer"> -->
+                <button class="btn btn-light" type="button">Limpar</button>
+                <button type="submit" class="btn btn-light">Inserir</button>
+                <!-- </div> -->
 
             </div>
 
@@ -141,20 +139,19 @@
 
 
     <!-- MODAL PRA REMOÇÃO -->
-    <div class="modal" tabindex="-1" role="dialog">
+    <div class="modal" tabindex="-1" role="dialog" id="remove">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
+                    <h5 class="modal-title">Solicitação de Confirmação</h5>
                 </div>
+
                 <div class="modal-body">
-                    <p>Modal body text goes here.</p>
+                    <h1>Confirma exclusão?!</h1>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" id="remove_ok" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary">Save changes</button>
                 </div>
             </div>
