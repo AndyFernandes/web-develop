@@ -14,16 +14,6 @@
 
 // paginação na tabela de usuários
 
-// armazenar campus e curso
-
-// validação de matricula (6 num)
-
-// validação de ddd e telefone
-
-// validação email + nome + data nasc
-
-// permitir alteração das info de alunos ->  
-
 alunos = []
 
 campi_cursos = {
@@ -34,32 +24,61 @@ campi_cursos = {
 
 $('#remove').modal('hide');
 
-var selectCampus = document.getElementById('campus');
+////////// OPERAÇÕES
+function ordenar_alunos(){}
 
-function validar_matricula(matricula) {}
+function atualizar_valores_tabela(){
+    // remover filhos da tabela
+    // apendar novos filhos na tabela
+    // OU só criar um novo elemento da tabela, pegar os elementos da tabela, e ordenalos
+}
 
-function validar_ddd(ddd) {}
+////////////////////// LISTENS
+function next(){} // proxima página
 
-function validar_telefone(telefone) {}
-
-function validar_email(email) {}
-
-function validar_nome(nome) {}
-
-function validar_data_nasc(data_nasc) {}
+function back(){} // voltar pagina
 
 function changeSelect(evento) {
     console.log(evento.value);
 }
 
-function ordenar_alunos(){
-
+function limpar() {
+    document.getElementById('matricula').value = '';
+    document.getElementById('nome').value = '';
+    document.getElementById('data_nasc').value = '';
+    document.getElementById('email').value = '';
+    document.getElementById('ddd').value = '';
+    document.getElementById('telefone').value = '';
+    document.getElementById('operadoras').value = '';
+    document.getElementById('campus').value = '';
+    document.getElementById('curso').value = '';
 }
 
-function atualizar_valores_tabela(){
+//////////////////////// VALIDAÇÕES
+function verificacao_duplicidade_matricula(matricula){}
 
+// validação de matricula (6 num)
+function validar_matricula(matricula) {
+    //// validação aqui
+    verificacao_duplicidade_matricula(matricula);
 }
 
+// validação de ddd 
+function validar_ddd(ddd) {}
+
+// validação de telefone
+function validar_telefone(telefone) {}
+
+// validação email 
+function validar_email(email) {}
+
+// validação nome 
+function validar_nome(nome) {}
+
+// validação data nascimento 
+function validar_data_nasc(data_nasc) {}
+
+//////////////////////// CRUD ALUNO
 function inserir() {
     var matricula = document.getElementById('matricula').value;
     var nome = document.getElementById('nome').value;
@@ -96,20 +115,7 @@ function inserir() {
 
 function remover(evento){
     $('#remove').modal('show');
-
-
 }
 
 function atualizar(evento){}
 
-function limpar() {
-    document.getElementById('matricula').value = '';
-    document.getElementById('nome').value = '';
-    document.getElementById('data_nasc').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('ddd').value = '';
-    document.getElementById('telefone').value = '';
-    document.getElementById('operadoras').value = '';
-    document.getElementById('campus').value = '';
-    document.getElementById('curso').value = '';
-}
