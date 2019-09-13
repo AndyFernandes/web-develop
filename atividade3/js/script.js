@@ -39,7 +39,14 @@ function next(){} // proxima página
 function back(){} // voltar pagina
 
 function changeSelect(evento) {
-    console.log(evento.value);
+    var select = document.getElementById('curso').querySelectorAll('option');
+    var curso = evento.value;
+    // console.log(select);
+    select.forEach((element, index) => {
+        // console.log(element, index);
+        element.value = campi_cursos[curso][index];
+        element.innerText = campi_cursos[curso][index];
+    });
 }
 
 function limpar() {
