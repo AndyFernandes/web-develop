@@ -25,8 +25,9 @@ campi_cursos = {
 $('#remove').modal('hide');
 
 ////////// OPERAÇÕES
+// TODO
 function ordenar_alunos(){}
-
+// TODO
 function atualizar_valores_tabela(){
     // remover filhos da tabela
     // apendar novos filhos na tabela
@@ -34,7 +35,8 @@ function atualizar_valores_tabela(){
 }
 
 ////////////////////// LISTENS
-function next(){} // proxima página
+// TODO
+function next(){} // proxima página 
 
 function back(){} // voltar pagina
 
@@ -62,8 +64,10 @@ function limpar() {
 }
 
 //////////////////////// VALIDAÇÕES
+// TODO
 function verificacao_duplicidade_matricula(matricula){}
 
+// TODO
 // validação de matricula (6 num)
 function validar_matricula(matricula) {
     //// validação aqui
