@@ -4,3 +4,19 @@ form {
     padding-right: 5%;
     padding-top: 2%;
 }
+
+::-webkit-validation-bubble-message {
+    padding: 1em;
+}
+
+input:focus:invalid,
+textarea:focus:invalid {
+    box-shadow: 0 0 5px #d45252;
+    border-color: #b03535
+}
+
+input:focus:valid,
+textarea:focus:valid {
+    box-shadow: 0 0 5px #5cd053;
+    border-color: #28921f;
+}
