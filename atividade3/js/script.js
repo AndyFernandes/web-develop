@@ -127,16 +127,10 @@ function validar_telefone(telefone) {
     return true;
 };
 
-//TODO
-function validar_email(email) {};
-
 function validar_nome(nome) {
     if (nome.length >= 3) return false;
     return true;
 };
-
-// TODO
-function validar_data_nasc(data_nasc) {}
 
 //////////////////////// CRUD ALUNO
 function inserir() {
@@ -152,15 +146,11 @@ function inserir() {
 
     if (validar_matricula(matricula) ||
         validar_nome(nome) ||
-        validar_data_nasc(data_nasc) ||
-        validar_email(email) ||
         validar_ddd(ddd) ||
         validar_telefone(telefone)) {
         return;
     } else if (verificacao_duplicidade_matricula(matricula)) {
         //TODO: modal de matricula duplicada
-        // console.log("ENTREI AQQQQ");
-        // console.log(verificacao_duplicidade_matricula(matricula));
     } else {
         alunos.push({
             'matricula': matricula,
@@ -177,25 +167,68 @@ function inserir() {
         ordenar_alunos();
         atualizar_valores_tabela();
         limpar();
-        //TODO: modal de adicionado com sucesso
+        alert("Matricula realizada com sucesso!");
     }
 };
 
-function confirmar(matricula) {
-    $("#remove").modal('hide');
+function get_index_aluno_by_matricula(matricula) {
     alunos.forEach((aluno, index) => {
         if (aluno.matricula == matricula) {
-            alunos.splice(index, 1);
-            atualizar_valores_tabela();
+            return index;
         }
     });
+}
+
+function confirmar_remocao(matricula) {
+    $("#remove").modal('hide');
+    var index = get_index_aluno_by_matricula(matricula);
+    alunos.splice(index, 1);
+    atualizar_valores_tabela();
 };
 
 function remover(evento) {
     $('#remove').modal('show');
     var matricula = evento.className.split(" ")[2];
-    document.getElementById('confirmar').setAttribute('onclick', 'confirmar(' + matricula + ')');
+    document.getElementById('confirmar').setAttribute('onclick', 'confirmar_remocao(' + matricula + ')');
 };
 
-//TODO
-function atualizar(evento) {};
+function confirmar_alteracao(index) {
+    alunos[index].matricula = document.getElementById('matricula').value;
+    alunos[index].nome = document.getElementById('nome').value;
+    alunos[index].data_nasc = document.getElementById('data_nasc').value;
+    alunos[index].email = document.getElementById('email').value;
+    alunos[index].ddd = document.getElementById('ddd').value;
+    alunos[index].telefone = document.getElementById('telefone').value;
+    alunos[index].operadoras = document.getElementById('operadoras').value;
+    alunos[index].campus = document.getElementById('campus').value;
+    alunos[index].curso = document.getElementById('curso').value;
+
+    alert("Alteração realizada com sucesso!");
+    atualizar_valores_tabela();
+    limpar();
+    document.getElementById('submit_form').textContent = "Inserir";
+    document.getElementById('submit_form').setAttribute('onclick', 'inserir()');
+}
+
+function alterar(evento) {
+    var matricula = evento.className.split(" ")[3];
+    var index;
+    alunos.forEach((aluno, i) => {
+        if (aluno.matricula == matricula) {
+            index = i;
+        }
+    });
+
+    document.getElementById('matricula').value = matricula;
+    document.getElementById('nome').value = alunos[index].nome;
+    document.getElementById('data_nasc').value = alunos[index].data_nasc;
+    document.getElementById('email').value = alunos[index].email;
+    document.getElementById('ddd').value = alunos[index].ddd;
+    document.getElementById('telefone').value = alunos[index].matricula;
+    document.getElementById('operadoras').value = alunos[index].matricula;
+    document.getElementById('campus').value = alunos[index].matricula;
+    document.getElementById('curso').value = alunos[index].matricula;
+
+    document.getElementById('submit_form').textContent = "Confirmar alterações";
+    document.getElementById('submit_form').setAttribute('onclick', 'confirmar_alteracao(' + index + ')');
+};
