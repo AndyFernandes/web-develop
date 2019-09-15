@@ -78,6 +78,10 @@ function next() {} // proxima página
 
 function back() {} // voltar pagina
 
+function autor() {
+    $("#autor").modal('show');
+}
+
 function changeSelect(evento) {
     var select = document.getElementById('curso').querySelectorAll('option');
     var curso = evento.value;

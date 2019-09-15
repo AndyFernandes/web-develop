@@ -12,7 +12,8 @@
 </head>
 
 <body>
-    <button class="btn"><i class="fa fa-bars text-right"></i></button>
+    <button class="btn" onclick="autor()"><i class="fa fa-bars text-right"></i></button>
+
     <div class="container">
         <h1>Sistema de Controle de Alunos</h1>
 
@@ -135,8 +136,6 @@
     </div>
 
 
-
-
     <!-- MODAL PRA REMOÇÃO -->
     <div class="modal" tabindex="-1" role="dialog" id="remove">
         <div class="modal-dialog" role="document">
@@ -156,6 +155,53 @@
     </div>
     </div>
     </div>
+
+
+    <!-- MODAL PRA MATRICULA REPETIDA -->
+    <div class="modal" tabindex="-1" role="dialog" id="matricula_repetida">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitação de Confirmação</h5>
+                </div>
+
+                <div class="modal-body">
+                    <h1>Confirma exclusão?!</h1>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MODAL PARA AUTOR -->
+    <div class="modal" tabindex="-1" role="dialog" id="autor">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Autor</h5>
+                </div>
+
+                <div class="modal-body row">
+                    <div class="col-4">
+                        <img class="rounded-circle img-thumbnail float-left" src="img/ddza.jpg ">
+                    </div>
+
+                    <div class="col-4">
+                        <p> EAIIIIIIIIIIIIIIIIIIIIIIIII</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 
     <script src="js/jquery.min.js"></script>
