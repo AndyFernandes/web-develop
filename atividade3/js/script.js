@@ -22,12 +22,23 @@ campi_cursos = {
 };
 var tbody = document.querySelector('tbody');
 console.log(tbody);
-$('#remove').modal('hide');
+// $('#remove').modal('hide');
 
 
 ////////// OPERAÇÕES
-// TODO
-function ordenar_alunos() {}
+function ordenar_alunos(aluno) {
+    function compare(a, b) {
+        let comparison = 0;
+        if (a.matricula > b.matricula) {
+            comparison = 1;
+        } else if (a.matricula < b.matricula) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
+    alunos.sort(compare);
+}
 
 function gerar_linha(aluno) {
     var botao_remover = document.createElement('button');
@@ -64,10 +75,10 @@ function atualizar_valores_tabela() {
     childs.forEach(child => {
         child.remove();
     });
-
     alunos.forEach(aluno => {
         tbody.appendChild(gerar_linha(aluno));
     });
+
 };
 
 ////////////////////// LISTENS
@@ -102,14 +113,14 @@ function limpar() {
 // TODO
 function verificacao_duplicidade_matricula(matricula) {
     alunos.forEach(aluno => {
-        if (aluno.matricula == matricula) return false;
+        if (aluno.matricula == matricula) return true;
     });
-    return true;
+    return false;
     //mostrar modal
 }
 
 function validar_matricula(matricula) {
-    if (matricula.length === 6 && !isNaN(matricula) && verificacao_duplicidade_matricula(matricula)) return true;
+    if (matricula.length === 6 && !isNaN(matricula)) return true;
     return false;
 }
 
@@ -145,14 +156,23 @@ function inserir() {
     var campus = document.getElementById('campus').value;
     var curso = document.getElementById('curso').value;
 
-    if (validar_matricula(matricula) &&
-        validar_nome(nome) &&
-        validar_data_nasc(data_nasc) &&
-        validar_email(email) &&
-        validar_ddd(ddd) &&
-        validar_telefone(telefone)) {
-        return;
-    }
+    // if (validar_matricula(matricula)) {
+    //     if (verificacao_duplicidade_matricula(matricula)) {
+    //         // mostrar modal
+    //         return;
+    //     }
+
+    //     if (validar_nome(nome) &&
+    //         validar_data_nasc(data_nasc) &&
+    //         validar_email(email) &&
+    //         validar_ddd(ddd) &&
+    //         validar_telefone(telefone)) {
+    //         // mostrar modal de dados inválidos
+    //         return;
+    //     }
+    // }
+    if (verificacao_duplicidade_matricula(matricula)) return;
+
 
     alunos.push({
         'matricula': matricula,
@@ -166,6 +186,7 @@ function inserir() {
         'curso': curso
     });
 
+    ordenar_alunos();
     atualizar_valores_tabela();
     console.log(alunos);
 }
