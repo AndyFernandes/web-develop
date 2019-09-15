@@ -1,31 +1,17 @@
-// vetor pra armazenar objeto aluno {'matricula', 'nome, 'ddd', 'telefone', 'operadora', 'campus', 'curso'}
-
 // click pro ? que será about
-
-// campos obrigatórios do forms
-
-// limpar dados do forms
-
-// tabelas atualizam quando insere um novo aluno -> tabela ordenada
-
 // botão pra remoção de aluno na tabela
-
-// não é permitido inclusão de aluno com mesma matrícula
-
+// botão para alterar aluno na tabela
 // paginação na tabela de usuários
-
+// modais pra tratamento de eventos
+var tbody = document.querySelector('tbody');
 alunos = [];
 campi_cursos = {
     'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
     'Pici': ['Computação', 'Matemática', 'Geologia'],
     'Benfica': ['Letras', 'Filosofia', 'Direito']
 };
-var tbody = document.querySelector('tbody');
-console.log(tbody);
-// $('#remove').modal('hide');
 
-
-////////// OPERAÇÕES
+/////////////////////////// OPERAÇÕES  ///////////////////////////
 function ordenar_alunos(aluno) {
     function compare(a, b) {
         let comparison = 0;
@@ -38,18 +24,24 @@ function ordenar_alunos(aluno) {
     }
 
     alunos.sort(compare);
-}
+};
 
 function gerar_linha(aluno) {
     var botao_remover = document.createElement('button');
-    botao_remover.className = 'btn btn-light ' + aluno['matricula'];
-    botao_remover.id = "remover_aluno";
-    botao_remover.value = 'Remover';
+    botao_remover.className = 'btn btn-danger ' + aluno['matricula'];
+    botao_remover.setAttribute('onclick', 'remover(this)');
+    botao_remover.textContent = "Remover";
 
     var botao_alterar = document.createElement('button');
-    botao_alterar.className = 'btn btn-light ' + aluno['matricula'];
-    botao_alterar.value = 'Alterar';
-    botao_alterar.id = "alterar_aluno";
+    botao_alterar.className = 'btn btn-info alterar ' + aluno['matricula'];
+    botao_alterar.setAttribute('onclick', 'alterar(this)');
+    botao_alterar.textContent = "Alterar";
+
+    var div = document.createElement('div');
+    div.className = "row";
+
+    div.appendChild(botao_remover);
+    div.appendChild(botao_alterar);
 
     var tr = document.createElement('tr');
     var th_matricula = document.createElement('th');
@@ -61,8 +53,7 @@ function gerar_linha(aluno) {
 
     th_matricula.appendChild(matricula);
     th_nome.appendChild(nome);
-    th_botao.appendChild(botao_remover);
-    th_botao.appendChild(botao_alterar);
+    th_botao.appendChild(div);
 
     tr.appendChild(th_matricula);
     tr.appendChild(th_nome);
@@ -110,38 +101,41 @@ function limpar() {
 }
 
 //////////////////////// VALIDAÇÕES
-// TODO
 function verificacao_duplicidade_matricula(matricula) {
+    var retorno = false;
     alunos.forEach(aluno => {
-        if (aluno.matricula == matricula) return true;
+        if (aluno.matricula === matricula) {
+            retorno = true;
+            return;
+        }
     });
-    return false;
-    //mostrar modal
-}
+    return retorno;
+};
 
 function validar_matricula(matricula) {
-    if (matricula.length === 6 && !isNaN(matricula)) return true;
-    return false;
-}
+    if (matricula.length === 6 && !isNaN(matricula)) return false;
+    return true;
+};
 
 function validar_ddd(ddd) {
-    if (ddd.length === 2 && !isNaN(ddd)) return true;
-    return false;
+    if (ddd.length === 2 && !isNaN(ddd)) return false;
+    return true;
 };
 
 function validar_telefone(telefone) {
-    if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return true;
-    return false;
-}
+    if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return false;
+    return true;
+};
 
-function validar_email(email) {}
+//TODO
+function validar_email(email) {};
 
 function validar_nome(nome) {
-    if (nome.length >= 2) return true;
-    return false;
-}
+    if (nome.length >= 3) return false;
+    return true;
+};
 
-// validação data nascimento 
+// TODO
 function validar_data_nasc(data_nasc) {}
 
 //////////////////////// CRUD ALUNO
@@ -156,43 +150,52 @@ function inserir() {
     var campus = document.getElementById('campus').value;
     var curso = document.getElementById('curso').value;
 
-    // if (validar_matricula(matricula)) {
-    //     if (verificacao_duplicidade_matricula(matricula)) {
-    //         // mostrar modal
-    //         return;
-    //     }
+    if (validar_matricula(matricula) ||
+        validar_nome(nome) ||
+        validar_data_nasc(data_nasc) ||
+        validar_email(email) ||
+        validar_ddd(ddd) ||
+        validar_telefone(telefone)) {
+        return;
+    } else if (verificacao_duplicidade_matricula(matricula)) {
+        //TODO: modal de matricula duplicada
+        // console.log("ENTREI AQQQQ");
+        // console.log(verificacao_duplicidade_matricula(matricula));
+    } else {
+        alunos.push({
+            'matricula': matricula,
+            'nome': nome,
+            'data_nasc': data_nasc,
+            'email': email,
+            'ddd': ddd,
+            'telefone': telefone,
+            'operadora': operadora,
+            'campus': campus,
+            'curso': curso
+        });
 
-    //     if (validar_nome(nome) &&
-    //         validar_data_nasc(data_nasc) &&
-    //         validar_email(email) &&
-    //         validar_ddd(ddd) &&
-    //         validar_telefone(telefone)) {
-    //         // mostrar modal de dados inválidos
-    //         return;
-    //     }
-    // }
-    if (verificacao_duplicidade_matricula(matricula)) return;
+        ordenar_alunos();
+        atualizar_valores_tabela();
+        limpar();
+        //TODO: modal de adicionado com sucesso
+    }
+};
 
-
-    alunos.push({
-        'matricula': matricula,
-        'nome': nome,
-        'data_nasc': data_nasc,
-        'email': email,
-        'ddd': ddd,
-        'telefone': telefone,
-        'operadora': operadora,
-        'campus': campus,
-        'curso': curso
+function confirmar(matricula) {
+    $("#remove").modal('hide');
+    alunos.forEach((aluno, index) => {
+        if (aluno.matricula == matricula) {
+            alunos.splice(index, 1);
+            atualizar_valores_tabela();
+        }
     });
-
-    ordenar_alunos();
-    atualizar_valores_tabela();
-    console.log(alunos);
-}
+};
 
 function remover(evento) {
     $('#remove').modal('show');
-}
+    var matricula = evento.className.split(" ")[2];
+    document.getElementById('confirmar').setAttribute('onclick', 'confirmar(' + matricula + ')');
+};
 
-function atualizar(evento) {}
+//TODO
+function atualizar(evento) {};
