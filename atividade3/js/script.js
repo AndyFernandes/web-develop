@@ -212,6 +212,7 @@ function confirmar_alteracao(index) {
     limpar();
     document.getElementById('submit_form').textContent = "Inserir";
     document.getElementById('submit_form').setAttribute('onclick', 'inserir()');
+    document.getElementById('matricula').readOnly = "false";
 }
 
 function alterar(evento) {
@@ -224,6 +225,7 @@ function alterar(evento) {
     });
 
     document.getElementById('matricula').value = matricula;
+    document.getElementById('matricula').readOnly = "true";
     document.getElementById('nome').value = alunos[index].nome;
     document.getElementById('data_nasc').value = alunos[index].data_nasc;
     document.getElementById('email').value = alunos[index].email;
