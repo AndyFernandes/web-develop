@@ -5,6 +5,7 @@
 // modais pra tratamento de eventos
 var tbody = document.querySelector('tbody');
 alunos = [];
+var mood_inserir = true; // true: inserir false: alterar
 campi_cursos = {
     'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
     'Pici': ['Computação', 'Matemática', 'Geologia'],
@@ -102,6 +103,12 @@ function limpar() {
     document.getElementById('operadoras').value = '';
     document.getElementById('campus').value = '';
     document.getElementById('curso').value = '';
+
+    if(mood_inserir == false){
+        document.getElementById('submit_form').textContent = "Inserir";
+        document.getElementById('submit_form').setAttribute('onclick', 'inserir()');
+        document.getElementById('matricula').readOnly = false;
+    }
 }
 
 //////////////////////// VALIDAÇÕES
@@ -138,6 +145,7 @@ function validar_nome(nome) {
 
 //////////////////////// CRUD ALUNO
 function inserir() {
+    mood_inserir = true;
     var matricula = document.getElementById('matricula').value;
     var nome = document.getElementById('nome').value;
     var data_nasc = document.getElementById('data_nasc').value;
@@ -210,12 +218,10 @@ function confirmar_alteracao(index) {
     alert("Alteração realizada com sucesso!");
     atualizar_valores_tabela();
     limpar();
-    document.getElementById('submit_form').textContent = "Inserir";
-    document.getElementById('submit_form').setAttribute('onclick', 'inserir()');
-    document.getElementById('matricula').readOnly = "false";
 }
 
 function alterar(evento) {
+    mood_inserir = false;
     var matricula = evento.className.split(" ")[3];
     var index;
     alunos.forEach((aluno, i) => {
@@ -225,15 +231,15 @@ function alterar(evento) {
     });
 
     document.getElementById('matricula').value = matricula;
-    document.getElementById('matricula').readOnly = "true";
+    document.getElementById('matricula').readOnly = true;
     document.getElementById('nome').value = alunos[index].nome;
     document.getElementById('data_nasc').value = alunos[index].data_nasc;
     document.getElementById('email').value = alunos[index].email;
     document.getElementById('ddd').value = alunos[index].ddd;
-    document.getElementById('telefone').value = alunos[index].matricula;
-    document.getElementById('operadoras').value = alunos[index].matricula;
-    document.getElementById('campus').value = alunos[index].matricula;
-    document.getElementById('curso').value = alunos[index].matricula;
+    document.getElementById('telefone').value = alunos[index].telefone;
+    document.getElementById('operadoras').value = alunos[index].operadora;
+    document.getElementById('campus').value = alunos[index].campus;
+    document.getElementById('curso').value = alunos[index].curso;
 
     document.getElementById('submit_form').textContent = "Confirmar alterações";
     document.getElementById('submit_form').setAttribute('onclick', 'confirmar_alteracao(' + index + ')');
