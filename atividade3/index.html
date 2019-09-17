@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -5,21 +6,26 @@
     <title>Cadastro aluno</title>
     <meta charset="utf8">
 
-
+    <!-- CSSs -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
 <body>
-    <button class="btn" onclick="autor()"><i class="fa fa-bars text-right"></i></button>
+    
 
     <div class="container">
-        <h1>Sistema de Controle de Alunos</h1>
+        <div class="row">
+                <h1 class="col-9">Sistema de Controle de Alunos</h1>
+                <a href="#" onclick="autor()" class="float-right col-3"><img src="img/icone.png " id="autor_img"></a>
+                
+        </div>
+        
 
         <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
         <!-- FORMULARIO -->
-        <form class="container border border-primary" method="POST">
+        <form class="container border border-primary shadow-lg mb-5 bg-white rounded" method="POST">
             <div class="row">
                 <div class="form-group col-4">
                     <label for="matricula"><b>Matrícula</b></label>
@@ -89,8 +95,8 @@
             </div>
 
             <div class="card-header row text-right">
-                <button type="button" class="btn btn-light " onclick=limpar()>Limpar</a>
-                <button type="submit" class="btn btn-info " id="submit_form" onclick=inserir()>Inserir</a>
+                <button type="button" class="btn btn-light float-right" onclick=limpar()>Limpar</a>
+                <button type="submit" class="btn btn-info float-right" id="submit_form" onclick=inserir()>Inserir</a>
 
             </div>
 
@@ -113,26 +119,23 @@
             <tbody></tbody>
         </table>
 
-        <nav aria-label="Navegação de página exemplo">
+        <!-- PAGINAÇÃO -->
+        <!-- <nav aria-label="Navegação de página exemplo">
             <ul class="pagination">
               <li class="page-item">
-                <a class="page-link" href="#" aria-label="Anterior">
+                <a class="page-link" href="#tabela_alunos" aria-label="Anterior" onclick="back()">
                   <span aria-hidden="true">&laquo;</span>
                   <span class="sr-only">Anterior</span>
                 </a>
               </li>
-              <li class="page-item"><a class="page-link" href="#tabela_alunos">1</a></li>
-              <li class="page-item"><a class="page-link" href="#tabela_alunos">2</a></li>
-              <li class="page-item"><a class="page-link" href="#tabela_alunos">3</a></li>
               <li class="page-item">
-                <a class="page-link" href="#tabela_alunos" aria-label="Próximo">
+                <a class="page-link" href="#tabela_alunos" aria-label="Próximo" onclick="next()">
                   <span aria-hidden="true">&raquo;</span>
                   <span class="sr-only">Próximo</span>
                 </a>
               </li>
             </ul>
-          </nav>
-
+          </nav> -->
     </div>
 
 
@@ -162,11 +165,11 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Solicitação de Confirmação</h5>
+                    <h1 class="modal-title">AVISO</h1>
                 </div>
 
                 <div class="modal-body">
-                    <h1>Confirma exclusão?!</h1>
+                    <h5>Essa matrícula já existe, por favor, tente novamente.</h5>
                 </div>
 
                 <div class="modal-footer">
@@ -202,8 +205,7 @@
         </div>
     </div>
 
-
-
+    <!-- SCRIPTS -->
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>

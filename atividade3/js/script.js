@@ -6,6 +6,12 @@
 var tbody = document.querySelector('tbody');
 alunos = [];
 var mood_inserir = true; // true: inserir false: alterar
+var num_pages = 1;
+var page_atual = 1;
+const MAX_LENGTH_MATRICULA = 6;
+const MAX_LENGTH_DDD = 2;
+const MIN_LENGTH_NOME = 3;
+
 campi_cursos = {
     'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
     'Pici': ['Computação', 'Matemática', 'Geologia'],
@@ -23,7 +29,6 @@ function ordenar_alunos(aluno) {
         }
         return comparison;
     }
-
     alunos.sort(compare);
 };
 
@@ -67,17 +72,27 @@ function atualizar_valores_tabela() {
     childs.forEach(child => {
         child.remove();
     });
-    alunos.forEach(aluno => {
-        tbody.appendChild(gerar_linha(aluno));
-    });
-
+    
+    alunos.forEach(aluno => tbody.appendChild(gerar_linha(aluno)));
+    // var inicio = (page_atual - 1) * 10;
+    // var fim = inicio + 10;
+    // for(var i = inicio; i < fim; i++){
+    //     tbody.appendChild(gerar_linha(alunos[i]));
+    // }
 };
 
-////////////////////// LISTENS
-// TODO
-function next() {} // proxima página 
+/////////////////////////// LISTENS ///////////////////////////
+// function next() { // proxima página
+//     if(page_atual == num_pages) return; 
+//     page_atual += 1;
+//     atualizar_valores_tabela();
+// } 
 
-function back() {} // voltar pagina
+// function back() { // voltar pagina
+//     if(page_atual == 1) return;
+//     page_atual -= 1;
+//     atualizar_valores_tabela();
+// } 
 
 function autor() {
     $("#autor").modal('show');
@@ -111,39 +126,38 @@ function limpar() {
     }
 }
 
-//////////////////////// VALIDAÇÕES
+/////////////////////////// VALIDAÇÕES ///////////////////////////
 function verificacao_duplicidade_matricula(matricula) {
-    var retorno = false;
+    var retorno = "valido";
     alunos.forEach(aluno => {
         if (aluno.matricula === matricula) {
-            retorno = true;
-            return;
+            retorno = "invalido";
         }
     });
     return retorno;
 };
 
-function validar_matricula(matricula) {
-    if (matricula.length === 6 && !isNaN(matricula)) return false;
-    return true;
-};
+// function validar_matricula(matricula) {
+//     if (matricula.length === MAX_LENGTH_MATRICULA && !isNaN(matricula)) return false;
+//     return true;
+// };
 
-function validar_ddd(ddd) {
-    if (ddd.length === 2 && !isNaN(ddd)) return false;
-    return true;
-};
+// function validar_ddd(ddd) {
+//     if (ddd.length === MAX_LENGTH_DDD && !isNaN(ddd)) return false;
+//     return true;
+// };
 
-function validar_telefone(telefone) {
-    if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return false;
-    return true;
-};
+// function validar_telefone(telefone) {
+//     if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return false;
+//     return true;
+// };
 
-function validar_nome(nome) {
-    if (nome.length >= 3) return false;
-    return true;
-};
+// function validar_nome(nome) {
+//     if (nome.length >= MIN_LENGTH_NOME) return false;
+//     return true;
+// };
 
-//////////////////////// CRUD ALUNO
+/////////////////////////// CRUD ALUNO ///////////////////////////
 function inserir() {
     mood_inserir = true;
     var matricula = document.getElementById('matricula').value;
@@ -156,13 +170,14 @@ function inserir() {
     var campus = document.getElementById('campus').value;
     var curso = document.getElementById('curso').value;
 
-    if (validar_matricula(matricula) ||
-        validar_nome(nome) ||
-        validar_ddd(ddd) ||
-        validar_telefone(telefone)) {
-        return;
-    } else if (verificacao_duplicidade_matricula(matricula)) {
-        //TODO: modal de matricula duplicada
+    // if (validar_matricula(matricula) ||
+    //     validar_nome(nome) ||
+    //     validar_ddd(ddd) ||
+    //     validar_telefone(telefone)) {
+    //     return;
+    // } 
+    if (verificacao_duplicidade_matricula(matricula) == "invalido") {
+        $("#matricula_repetida").modal('show');
     } else {
         alunos.push({
             'matricula': matricula,
@@ -176,10 +191,11 @@ function inserir() {
             'curso': curso
         });
 
+        limpar();
         ordenar_alunos();
         atualizar_valores_tabela();
-        limpar();
         alert("Matricula realizada com sucesso!");
+        // num_pages = Math.ceil(alunos.length / 10);
     }
 };
 
@@ -195,6 +211,7 @@ function confirmar_remocao(matricula) {
     $("#remove").modal('hide');
     var index = get_index_aluno_by_matricula(matricula);
     alunos.splice(index, 1);
+    // num_pages = Math.ceil(alunos.length / 10);
     atualizar_valores_tabela();
 };
 

@@ -24,3 +24,11 @@ textarea:focus:valid {
 .alterar {
     margin-left: 2%;
 }
+
+#autor_img{
+    width: 15%;
+    margin-top: 3%;
+    background-color: #CCC;
+    border-radius: 50%;
+
+}
