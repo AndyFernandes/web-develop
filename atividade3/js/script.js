@@ -128,34 +128,22 @@ function limpar() {
 
 /////////////////////////// VALIDAÇÕES ///////////////////////////
 function verificacao_duplicidade_matricula(matricula) {
+    alunos.forEach(aluno => {
+        if (aluno.matricula == matricula.value) {
+            $("#matricula_repetida").modal('show');
+        }
+    });
+};
+
+function verificacao_duplicidade_matricula2(matricula) {
     var retorno = "valido";
     alunos.forEach(aluno => {
-        if (aluno.matricula === matricula) {
+        if (aluno.matricula == matricula) {
             retorno = "invalido";
         }
     });
     return retorno;
 };
-
-// function validar_matricula(matricula) {
-//     if (matricula.length === MAX_LENGTH_MATRICULA && !isNaN(matricula)) return false;
-//     return true;
-// };
-
-// function validar_ddd(ddd) {
-//     if (ddd.length === MAX_LENGTH_DDD && !isNaN(ddd)) return false;
-//     return true;
-// };
-
-// function validar_telefone(telefone) {
-//     if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return false;
-//     return true;
-// };
-
-// function validar_nome(nome) {
-//     if (nome.length >= MIN_LENGTH_NOME) return false;
-//     return true;
-// };
 
 /////////////////////////// CRUD ALUNO ///////////////////////////
 function inserir() {
@@ -170,14 +158,12 @@ function inserir() {
     var campus = document.getElementById('campus').value;
     var curso = document.getElementById('curso').value;
 
-    // if (validar_matricula(matricula) ||
-    //     validar_nome(nome) ||
-    //     validar_ddd(ddd) ||
-    //     validar_telefone(telefone)) {
-    //     return;
-    // } 
-    if (verificacao_duplicidade_matricula(matricula) == "invalido") {
+    if (verificacao_duplicidade_matricula2(matricula) == "invalido") {
         $("#matricula_repetida").modal('show');
+        limpar();
+        ordenar_alunos();
+        atualizar_valores_tabela();
+        return;
     } else {
         alunos.push({
             'matricula': matricula,
