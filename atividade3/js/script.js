@@ -145,6 +145,28 @@ function verificacao_duplicidade_matricula2(matricula) {
     return retorno;
 };
 
+function validar_matricula(matricula) {
+    if (matricula.length === 6 && !isNaN(matricula)) return false;
+    return true;
+};	
+
+
+function validar_ddd(ddd) {	
+    if (ddd.length === 2 && !isNaN(ddd)) return false;	
+    return true;
+};
+
+
+function validar_telefone(telefone) {
+    if ((telefone.length == 8 || telefone.length == 9) && !isNaN(telefone)) return false;
+    return true;
+};
+
+function validar_nome(nome) {	
+    if (nome.length >= 3) return false;
+    return true;
+};
+
 /////////////////////////// CRUD ALUNO ///////////////////////////
 function inserir() {
     mood_inserir = true;
@@ -158,7 +180,12 @@ function inserir() {
     var campus = document.getElementById('campus').value;
     var curso = document.getElementById('curso').value;
 
-    if (verificacao_duplicidade_matricula2(matricula) == "invalido") {
+    if (validar_matricula(matricula) ||	  
+        validar_nome(nome) ||	    
+        validar_ddd(ddd) ||	   
+        validar_telefone(telefone)) {
+        return;	
+    } else if (verificacao_duplicidade_matricula2(matricula) == "invalido") {
         $("#matricula_repetida").modal('show');
         limpar();
         ordenar_alunos();
