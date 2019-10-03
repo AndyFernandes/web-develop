@@ -23,11 +23,12 @@
 
         <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
 
-        <form @submit="inserir()" class="container border border-primary shadow-lg mb-5 bg-white rounded" method="">
+        <!-- FORMULARIO -->
+        <form ref="form" class="container border border-primary shadow-lg mb-5 bg-white rounded" method="">
             <div class="row">
                 <div class="form-group col-4">
                     <label for="matricula"><b>Matrícula</b></label>
-                    <input type="text" oninput="verificacao_duplicidade_matricula(this)" class="form-control" id="matricula" name="matricula" v-model="matricula" placeholder="Adicione a matrícula do aluno" minlength="6" maxlength="6" autofocus pattern="[0-9]{6}" required>
+                    <input type="text" v-on:input="verificacao_duplicidade_matricula()" class="form-control" id="matricula" name="matricula" v-model="matricula" placeholder="Adicione a matrícula do aluno" minlength="6" maxlength="6" autofocus pattern="[0-9]{6}" required>
                 </div>
 
                 <div class="form-group col-8">
@@ -63,11 +64,8 @@
                 <div class="form-group col-2">
                     <label for="operadoras"><b>Operadores</b></label>
                     <select class="custom-select" id="operadoras" v-model="operadora" required>
-                          <option selected value="oi">Oi</option>
-                          <option value="vivo">Vivo</option>
-                          <option value="claro">Claro</option>
-                          <option value="tim">Tim</option>
-                        </select>
+                          <option v-for="operadora in operadoras" :value="operadora"> {{ operadora }}</option>
+                    </select>
                 </div>
 
             </div>
@@ -75,68 +73,173 @@
             <div class="row">
                 <div class="form-group col-2">
                     <label for="campus"><b>Campus</b></label>
-                    <select class="custom-select" id="campus" onchange=changeSelect(this) v-model="campus" required>
-                                  <option selected value="Pici">Pici</option>
-                                  <option value="Porangabussu">Porangabussu</option>
-                                  <option value="Benfica">Benfica</option>
+                    <select class="custom-select" id="campus" v-model="campus" required>
+                        <option v-for="campi in campis" :value="campi">{{ campi }}</option>
+                                  <!-- <option value="Porangabussu">Porangabussu</option>
+                                  <option value="Benfica">Benfica</option> -->
                   </select>
                 </div>
 
                 <div class="form-group col-2">
                     <label for="curso"><b>Curso</b></label>
                     <select class="custom-select" id="curso" v-model="curso" required>
-                                      <option selected value="Computação">Computação</option>
-                                      <option value="Matemática">Matemática</option>
-                                      <option value="Geologia">Geologia</option>
+                        <option v-for="curso in campi_cursos[campus]" :value="curso">{{ curso }}</option>
+                                      <!-- <option value="Matemática">Matemática</option>
+                                      <option value="Geologia">Geologia</option> -->
                   </select>
                 </div>
             </div>
 
             <div class="card-header row text-right">
-                <button type="button" class="btn btn-light float-right" onclick=limpar()>Limpar</a>
-              <button type="submit" class="btn btn-info float-right" id="submit_form" onclick=inserir()>Inserir</a>
-
+                <button type="button" class="btn btn-light float-right" v-on:click="limpar()">Limpar</a>
+                <button type="submit" class="btn btn-info float-right" id="submit_form" v-on:click="inserir()">Inserir</a>
           </div>
 
         </form>
-        {{ nome }}
-        <br> {{ matricula }}
-        <br> {{ data_nasc }}
-        <br> {{ email }}
-        <br> {{ ddd }}
-        <br> {{ telefone }}
-        <br> {{ operadora }}
-        <br> {{ curso }}
-        <br> {{ campus }}
+        <table-todo :alunos="alunos"></table-todo>
     </div>
 
+
+    <!-- MODAL PRA REMOÇÃO -->
+    <div class="modal" tabindex="-1" role="dialog" id="remove">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitação de Confirmação</h5>
+                </div>
+
+                <div class="modal-body">
+                    <h1>Confirma exclusão?!</h1>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="confirmar">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="table-todo">
+        <table class="table">
+            <thead>
+                <tr><th scope="col">Matricula</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="aluno in alunos">
+                    <td>{{ aluno.matricula }}</td>
+                    <td>{{ aluno.nome }}</td>
+                    <td>
+                        <button class = "btn btn-danger" :id="aluno.matricula" v-on:click="remover(aluno.matricula)" >Remover</button>
+                        <!-- <button class = "btn btn-danger" :id="aluno.matricula" v-on:click="alterar"> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <!-- MODAL PRA MATRICULA REPETIDA -->
+    <div class="modal" tabindex="-1" role="dialog" id="matricula_repetida">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title">AVISO</h1>
+                </div>
+
+                <div class="modal-body">
+                    <h5>Essa matrícula já existe, por favor, tente novamente.</h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA AUTOR -->
+    <div class="modal" tabindex="-1" role="dialog" id="autor">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Autor</h5>
+                </div>
+
+                <div class="modal-body row">
+                    <div class="col-4">
+                        <img class="rounded-circle img-thumbnail float-left" src="img/ddza.jpg ">
+                    </div>
+
+                    <div class="col-4">
+                        <p> EAIIIIIIIIIIIIIIIIIIIIIIIII</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- SCRIPTS -->
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-    <!-- <script src="js/script.js"></script> -->
     <script>
         //TODO:
-        // > Checagem matricula repetida
-        // > Valores default operadora, curso e campus
-        // > Altenar valores de curso de acordo com campus
         // > Tabela: Alunos ordenados em ordem alfabetica
-        // > Remove, Inserir e Alterar
 
         var alunos = [];
         const MAX_LENGTH_MATRICULA = 6;
         const MAX_LENGTH_DDD = 2;
         const MIN_LENGTH_NOME = 3;
-        var mood_inserir = true; // true: inserir false: alterar
-        campi_cursos = {
-            'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
-            'Pici': ['Computação', 'Matemática', 'Geologia'],
-            'Benfica': ['Letras', 'Filosofia', 'Direito']
+
+        function get_index_aluno_by_matricula(matricula) {
+            alunos.forEach((aluno, index) => {
+                if (aluno.matricula == matricula) {
+                    return index;
+                }
+            });
+        }
+
+        function confirmar_remocao(matricula) {
+            $("#remove").modal('hide');
+            var index = get_index_aluno_by_matricula(matricula);
+            alunos.splice(index, 1);
         };
 
         function autor() {
           $("#autor").modal('show');
+        };
+
+        Vue.component('table-todo', {
+            template: "#table-todo",
+            props: ['alunos'],
+            methods: {
+                remover(matricula) {
+                    $('#remove').modal('show');
+                    document.getElementById('confirmar').setAttribute('onclick', 'confirmar_remocao(' + matricula + ')');
+                },
+                
+            }
+        });
+
+        function ordenar_alunos(aluno) {
+            function compare(a, b) {
+                let comparison = 0;
+                if (a.matricula > b.matricula) {
+                    comparison = 1;
+                } else if (a.matricula < b.matricula) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+            alunos.sort(compare);
         };
 
         var app = new Vue({
@@ -152,36 +255,80 @@
                 campus: "",
                 curso: "",
                 alunos: alunos,
+                operadoras: ['Oi', 'Vivo', 'Tim', 'Claro'],
+                campis: ['Porangabussu', 'Pici', 'Benfica'],
+                campi_cursos: {
+                                'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
+                                'Pici': ['Computação', 'Matemática', 'Geologia'],
+                                'Benfica': ['Letras', 'Filosofia', 'Direito']
+                            },
             },
             methods: {
-                inserir(e) {
-                  mood_inserir = true;
-                   e.preventDefault();
-                  // if (verificacao_duplicidade_matricula2(this.matricula) == "invalido") {
-                  //     $("#matricula_repetida").modal('show');
-                  //     limpar();
-                  //     return;
-                  // } else {
-                      alunos.push({
-                          'matricula': this.matricula,
-                          'nome': this.nome,
-                          'data_nasc': this.data_nasc,
-                          'email': this.email,
-                          'ddd': this.ddd,
-                          'telefone': this.telefone,
-                          'operadora': this.operadora,
-                          'campus': this.campus,
-                          'curso': this.curso
-                      });
-                      // limpar();
-                      // ordenar_alunos();
-                      alert("Matricula realizada com sucesso!");
-                  // }
-               }
-              }
-              })
-
-
+                ordenar_alunos(aluno) {
+                    function compare(a, b) {
+                        let comparison = 0;
+                        if (a.matricula > b.matricula) {
+                            comparison = 1;
+                        } else if (a.matricula < b.matricula) {
+                            comparison = -1;
+                        }
+                        return comparison;
+                    }
+                    this.alunos.sort(compare);
+                },
+                limpar() {
+                    this.matricula = '';
+                    this.nome = '';
+                    this.data_nasc = '';
+                    this.email = '';
+                    this.ddd = '';
+                    this.telefone = '';
+                    this.operadora = '';
+                    this.curso = '';
+                    this.campus = '';
+                }, 
+                verificacao_duplicidade_matricula() {
+                    this.alunos.forEach(aluno => {
+                        if (aluno.matricula == this.matricula) {
+                            $("#matricula_repetida").modal('show');
+                        }
+                    });
+                },
+                verificacao_duplicidade_matricula2() {
+                    var retorno = "valido";
+                    this.alunos.forEach(aluno => {
+                        if (aluno.matricula == this.matricula) {
+                            retorno = "invalido";
+                        }
+                    });
+                    return retorno;
+                },
+                inserir($e) {
+                    if(this.$refs.form.checkValidity()){
+                        if(this.verificacao_duplicidade_matricula2() == "valido"){
+                            
+                            this.alunos.push({
+                                'matricula': this.matricula,
+                                'nome': this.nome,
+                                'data_nasc': this.data_nasc,
+                                'email': this.email,
+                                'ddd': this.ddd,
+                                'telefone': this.telefone,
+                                'operadora': this.operadora,
+                                'campus': this.campus,
+                                'curso': this.curso
+                            });
+                            this.limpar();
+                            ordenar_alunos();
+                            alert("Matricula realizada com sucesso!");
+                        } else {
+                            $("#matricula_repetida").modal('show');
+                            return;
+                        }
+                    }
+                }
+            }
+        })
     </script>
 </body>
 
