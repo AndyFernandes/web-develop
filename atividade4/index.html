@@ -1,34 +1,188 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
+<html lang="pt">
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    
+
     <title>Cadastro aluno</title>
 
     <!-- CSSs -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  </head>
+</head>
 
-  <body>
-    <div class="container">
-      <div class="row">
-        <h1 class="col-9">Sistema de Controle de Alunos</h1>
-        <a href="#" onclick="autor()" class="float-right col-3"><img src="img/icone.png " id="autor_img"></a>
-      </div>
-      
-      <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
-      
-      <div id="app"></div>
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <h1 class="col-9">Sistema de Controle de Alunos</h1>
+            <a href="#" onclick="autor()" class="float-right col-3"><img src="img/icone.png " id="autor_img"></a>
+        </div>
+
+        <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
+
+        <form @submit="inserir()" class="container border border-primary shadow-lg mb-5 bg-white rounded" method="">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="matricula"><b>Matrícula</b></label>
+                    <input type="text" oninput="verificacao_duplicidade_matricula(this)" class="form-control" id="matricula" name="matricula" v-model="matricula" placeholder="Adicione a matrícula do aluno" minlength="6" maxlength="6" autofocus pattern="[0-9]{6}" required>
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="nome"><b>Nome</b></label>
+                    <input type="text" class="form-control" id="nome" v-model="nome" placeholder="Adicione o nome do aluno" minlength="3" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col-4">
+                    <label for="data_nasc"><b>Data de Nascimento</b></label>
+                    <input type="date" class="form-control" id="data_nasc" v-model="data_nasc" min="1925-01-01" max="2001-12-31" required>
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="email"><b>Email</b></label>
+                    <input type="email" class="form-control" id="email" v-model="email" placeholder="Adicione o email do aluno" required>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="ddd"><b>DDD</b></label>
+                    <input type="text" class="form-control" id="ddd" v-model="ddd" placeholder="DDD" minlength="2" maxlength="2" pattern="[0-9]{2}" required>
+                </div>
+
+                <div class="form-group col-4">
+                    <label for="telefone"><b>Telefone</b></label>
+                    <input type="text" class="form-control" id="telefone" v-model="telefone" placeholder="Adicione o telefone do aluno" minlength="8" maxlength="9" pattern="[0-9]{8,9}" required>
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="operadoras"><b>Operadores</b></label>
+                    <select class="custom-select" id="operadoras" v-model="operadora" required>
+                          <option selected value="oi">Oi</option>
+                          <option value="vivo">Vivo</option>
+                          <option value="claro">Claro</option>
+                          <option value="tim">Tim</option>
+                        </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="campus"><b>Campus</b></label>
+                    <select class="custom-select" id="campus" onchange=changeSelect(this) v-model="campus" required>
+                                  <option selected value="Pici">Pici</option>
+                                  <option value="Porangabussu">Porangabussu</option>
+                                  <option value="Benfica">Benfica</option>
+                  </select>
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="curso"><b>Curso</b></label>
+                    <select class="custom-select" id="curso" v-model="curso" required>
+                                      <option selected value="Computação">Computação</option>
+                                      <option value="Matemática">Matemática</option>
+                                      <option value="Geologia">Geologia</option>
+                  </select>
+                </div>
+            </div>
+
+            <div class="card-header row text-right">
+                <button type="button" class="btn btn-light float-right" onclick=limpar()>Limpar</a>
+              <button type="submit" class="btn btn-info float-right" id="submit_form" onclick=inserir()>Inserir</a>
+
+          </div>
+
+        </form>
+        {{ nome }}
+        <br> {{ matricula }}
+        <br> {{ data_nasc }}
+        <br> {{ email }}
+        <br> {{ ddd }}
+        <br> {{ telefone }}
+        <br> {{ operadora }}
+        <br> {{ curso }}
+        <br> {{ campus }}
     </div>
 
     <!-- SCRIPTS -->
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.js"></script>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/script.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- <script src="js/script.js"></script> -->
+    <script>
+        //TODO:
+        // > Checagem matricula repetida
+        // > Valores default operadora, curso e campus
+        // > Altenar valores de curso de acordo com campus
+        // > Tabela: Alunos ordenados em ordem alfabetica
+        // > Remove, Inserir e Alterar
+
+        var alunos = [];
+        const MAX_LENGTH_MATRICULA = 6;
+        const MAX_LENGTH_DDD = 2;
+        const MIN_LENGTH_NOME = 3;
+        var mood_inserir = true; // true: inserir false: alterar
+        campi_cursos = {
+            'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
+            'Pici': ['Computação', 'Matemática', 'Geologia'],
+            'Benfica': ['Letras', 'Filosofia', 'Direito']
+        };
+
+        function autor() {
+          $("#autor").modal('show');
+        };
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                nome: "",
+                matricula: "",
+                data_nasc: "",
+                email: "",
+                ddd: "",
+                telefone: "",
+                operadora: "",
+                campus: "",
+                curso: "",
+                alunos: alunos,
+            },
+            methods: {
+                inserir(e) {
+                  mood_inserir = true;
+                   e.preventDefault();
+                  // if (verificacao_duplicidade_matricula2(this.matricula) == "invalido") {
+                  //     $("#matricula_repetida").modal('show');
+                  //     limpar();
+                  //     return;
+                  // } else {
+                      alunos.push({
+                          'matricula': this.matricula,
+                          'nome': this.nome,
+                          'data_nasc': this.data_nasc,
+                          'email': this.email,
+                          'ddd': this.ddd,
+                          'telefone': this.telefone,
+                          'operadora': this.operadora,
+                          'campus': this.campus,
+                          'curso': this.curso
+                      });
+                      // limpar();
+                      // ordenar_alunos();
+                      alert("Matricula realizada com sucesso!");
+                  // }
+               }
+              }
+              })
+
+
+    </script>
+</body>
+
 </html>

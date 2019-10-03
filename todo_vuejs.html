@@ -1,19 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-   
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"></linkrel>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    </linkrel>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
+
 <body>
     <div class="container">
         <h2>Todo List</h2>
         <div id="app">
-            <!-- AAAAAAAAAAAA -->
             <input-todo></input-todo>
             <br><br>
             <table-todo :todos="tasks"></table-todo>
@@ -57,7 +59,7 @@
         Vue.component('input-todo', {
             template: "#input-todo",
             methods: {
-                add($event){
+                add($event) {
                     let task = {};
                     task.value = $event.target.value;
                     task.checked = false;
@@ -79,7 +81,8 @@
             }
         });
     </script>
-   
+
 
 </body>
+
 </html>
