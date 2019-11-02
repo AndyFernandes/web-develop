@@ -1,44 +1,74 @@
 var alunos = [];
+// considerando que 1 aluno é {"nome":"", "matricula": ""}
 
 module.exports = {
     async index(req, res) {
         return res.json(alunos);
     },
 
-    async store(req, res) {
-        var aluno = req.body;
-        //TODO: Fazer verificação se matrícula não é repetida
-        alunos.push(aluno);
-        return res.json(aluno);
-    },
-
     async show(req, res) {
-        var aluno;
+        var aluno = null;
+
         alunos.forEach(aluno_ => {
             if(aluno_.matricula == req.params.matricula)
                 aluno = aluno_;
         });
-        return res.json(aluno);
+
+        if(aluno != null) return res.json(aluno);
+        else res.status(404).send('Matrícula não encontrada!');
     },
 
+    async store(req, res) {
+        var aluno = req.body;
+        var existe = false;
+        
+        alunos.forEach(aluno_ => {
+            if(aluno_.matricula == aluno.matricula)
+                existe = true;
+        });
+
+        if(existe) res.status(400).send('Essa matrícula já está sendo utilizada!');
+        else if (existe == false){
+            alunos.push(aluno);
+            return res.json(aluno);
+        }
+        res.status(500).send('Aconteceu alguma coisa errada no servidor...');
+    },
+
+   
     async update(req, res) {
         var aluno = req.body;
-        alunos.forEach(aluno_ => {
-            if(aluno_.matricula == req.params.matricula)
-                aluno_ = aluno;
-                //TODO: ver se não precisa fazer uma atribuição parâmetro por parâmetro
+        var existe = false;
+        alunos.forEach((aluno_, i) => {
+            if(aluno_.matricula == req.params.matricula){
+                alunos[i].nome = aluno.nome;
+                aluno = alunos[i];
+                existe = true;
+            }   
         });
-        return res.json(aluno);
+
+        if(existe) return res.json(aluno);
+        else if (existe == false) return res.status(404).send('Matrícula não encontrada!');
+        return res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 
     async destroy(req, res) {
-        var index;
+        var index = null;
+        var existe = false;
+        var aluno = null;
+
         alunos.forEach((aluno_, i) => {
-            if(aluno_.matricula == req.params.matricula)
-                aluno_ = aluno;
-                index = i
+            if(aluno_.matricula == req.params.matricula){
+                index = i;
+                existe = true;
+                aluno = aluno_;
+            } 
         });
-        alunos.splice(index, 1);
-        return res.send();
+
+        if(existe){
+            alunos.splice(index, 1);
+            return res.json(aluno);
+        } else if (existe == false) return res.status(404).send('Matrícula não encontrada!');
+        return res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 };

@@ -1,4 +1,4 @@
-campi_cursos = {};
+var campi_cursos = [];
 
 module.exports = {
     async index(req, res) {
@@ -9,7 +9,7 @@ module.exports = {
         var campi = req.body;
         //TODO: Ver como é a estrutura desse campi_cursos se é um json com a chave campo e valor array de cursos
         // campi_cursos.push(aluno);
-        // return res.json(aluno);
+        // retugit srn res.json(aluno);
     },
 
     async show(req, res) {
