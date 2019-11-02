@@ -6,7 +6,7 @@ var campis = [
     }
 ];
 
-var alunos = require('./AlunoController').alunos;
+
 // considerando que 1 campi é =
 // {
 //     "codigo":"",
@@ -73,6 +73,8 @@ module.exports = {
         var index = null;
         var existe = false;
         var campi = null;
+        var indexes = [];
+        var alunos =  require('./AlunoController');
 
         campis.forEach((campi_, i) => {
             if(campi_.codigo == req.params.codigo){
@@ -80,12 +82,20 @@ module.exports = {
                 existe = true;
                 campi = campi_;
 
-                // alunos = alunos.filter((aluno_) => {
-                //     return aluno_.campus == campi_.campi;
-                // });
-                // console.log(alunos);
+                // console.log(alunos.alunos);
+                alunos.alunos.forEach((aluno_, index) => {
+                    if(aluno_.campus == campi_.campi){
+                        indexes.push(index);
+                        // alunos.alunos.splice(index, 1);
+                        // console.log(aluno_)
+                    }
+                });
             } 
         });
+
+        indexes.forEach(i =>{
+            alunos.alunos.splice(i, 1);
+        })
 
         if(existe){
             campis.splice(index, 1);

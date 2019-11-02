@@ -1,5 +1,4 @@
 var alunos = [];
-var campis = require('./CampiController').campis;
 // considerando que 1 aluno é =
 // {
 //     "matricula":"",
@@ -33,6 +32,8 @@ module.exports = {
     async store(req, res) {
         var aluno = req.body;
         var existe = false;
+
+        var campis = require('./CampiController').campis;
         
         alunos.forEach(aluno_ => {
             if(aluno_.matricula == aluno.matricula){
@@ -58,6 +59,8 @@ module.exports = {
     async update(req, res) {
         var aluno = req.body;
         var existe = false;
+
+        var campis = require('./CampiController').campis;
         alunos.forEach((aluno_, i) => {
             if(aluno_.matricula == req.params.matricula){
                 if("nome" in aluno && "data_nasc" in aluno && "email" in aluno && "ddd" in aluno && "telefone" in aluno && "operadora" in aluno && "campus" in aluno && "curso" in aluno){
