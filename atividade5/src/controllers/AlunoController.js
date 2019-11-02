@@ -1,5 +1,17 @@
 var alunos = [];
-// considerando que 1 aluno é {"nome":"", "matricula": ""}
+var campis = require('./CampiController').campis;
+// considerando que 1 aluno é =
+// {
+//     "matricula":"",
+//     "nome":"",
+//     "data_nasc":"",
+//     "email":"",
+//     "ddd":"",
+//     "telefone":"",
+//     "operadora":"",
+//     "campus":"",
+//     "curso":"",
+// }
 
 module.exports = {
     async index(req, res) {
@@ -23,14 +35,21 @@ module.exports = {
         var existe = false;
         
         alunos.forEach(aluno_ => {
-            if(aluno_.matricula == aluno.matricula)
+            if(aluno_.matricula == aluno.matricula){
                 existe = true;
+            }
         });
 
         if(existe) res.status(400).send('Essa matrícula já está sendo utilizada!');
         else if (existe == false){
-            alunos.push(aluno);
-            return res.json(aluno);
+            if("nome" in aluno && "data_nasc" in aluno && "email" in aluno && "ddd" in aluno && "telefone" in aluno && "operadora" in aluno && "campus" in aluno && "curso" in aluno){
+                campis.forEach(campi => {
+                    if(campi.campi == aluno.campus){
+                        alunos.push(aluno);
+                        return res.json(aluno);
+                    }
+                });
+            }
         }
         res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
@@ -41,10 +60,24 @@ module.exports = {
         var existe = false;
         alunos.forEach((aluno_, i) => {
             if(aluno_.matricula == req.params.matricula){
-                alunos[i].nome = aluno.nome;
-                aluno = alunos[i];
-                existe = true;
-            }   
+                if("nome" in aluno && "data_nasc" in aluno && "email" in aluno && "ddd" in aluno && "telefone" in aluno && "operadora" in aluno && "campus" in aluno && "curso" in aluno){
+                    campis.forEach(campi => {
+                        if(campi.campi == aluno.campus){
+                            alunos[i].nome = aluno.nome;
+                            alunos[i].data_nasc = aluno.data_nasc;
+                            alunos[i].email = aluno.email;
+                            alunos[i].ddd = aluno.ddd;
+                            alunos[i].telefone = aluno.telefone;
+                            alunos[i].operadora = aluno.operadora;
+                            alunos[i].campus = aluno.campus;
+                            alunos[i].curso = aluno.curso;
+
+                            aluno = alunos[i];
+                            existe = true;   
+                        }
+                    });
+                }
+            }
         });
 
         if(existe) return res.json(aluno);
@@ -72,3 +105,5 @@ module.exports = {
         return res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 };
+
+module.exports.alunos = alunos;

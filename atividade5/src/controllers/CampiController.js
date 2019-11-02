@@ -1,44 +1,98 @@
-var campi_cursos = [];
+var campis = [
+    {
+        "codigo": 1,
+        "campi": "Pici",
+        "cursos": ["Computação", "Engenharia de Computação", "SMD"]
+    }
+];
+
+var alunos = require('./AlunoController').alunos;
+// considerando que 1 campi é =
+// {
+//     "codigo":"",
+//     "campi":"",
+//     "cursos": ["curso1", "curso2", "curso3"]
+// }
 
 module.exports = {
     async index(req, res) {
-        return res.json(Object.keys(campi_cursos));
+        return res.json(campis);
+    },
+
+    async show(req, res) {
+        var campi = null;
+
+        campis.forEach(campi_ => {
+            if(campi_.codigo == req.params.codigo)
+                campi = campi_;
+        });
+
+        if(campi != null) return res.json(campi);
+        else res.status(404).send('Código não encontrada!');
     },
 
     async store(req, res) {
         var campi = req.body;
-        //TODO: Ver como é a estrutura desse campi_cursos se é um json com a chave campo e valor array de cursos
-        // campi_cursos.push(aluno);
-        // retugit srn res.json(aluno);
-    },
+        var existe = false;
+        
+        campis.forEach(campi_ => {
+            if(campi_.codigo == campi.codigo){
+                existe = true;
+            }
+        });
 
-    async show(req, res) {
-        // var campi;
-        // campi_cursos.forEach(aluno_ => {
-        //     if(aluno_.matricula == req.params.codigo)
-        //         aluno = aluno_;
-        // });
-        // return res.json(aluno);
+        if(existe) res.status(400).send('Esse código já está sendo utilizada!');
+        else if (existe == false){
+            if(campi.cursos.length >= 1){
+                campis.push(campi);
+                return res.json(campi);
+            }
+        }
+        res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 
     async update(req, res) {
-        var aluno = req.body;
-        alunos.forEach(aluno_ => {
-            if(aluno_.matricula == req.params.matricula)
-                aluno_ = aluno;
-                //TODO: ver se não precisa fazer uma atribuição parâmetro por parâmetro
+        var campi = req.body;
+        var existe = false;
+        
+        campis.forEach((campi_, i) => {
+            if(campi_.codigo == req.params.codigo && campi.cursos.length >= 1){
+                campis[i].campi = campi_.campi;
+                campis[i].cursos = campi_.cursos;
+                campi = campi_;
+                existe = true;
+            }
         });
-        return res.json(aluno);
+
+        if(existe) return res.json(campi); 
+        else if (existe == false) res.status(404).send('Código não encontrado!');
+        res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 
     async destroy(req, res) {
-        var index;
-        alunos.forEach((aluno_, i) => {
-            if(aluno_.matricula == req.params.matricula)
-                aluno_ = aluno;
-                index = i
+        var index = null;
+        var existe = false;
+        var campi = null;
+
+        campis.forEach((campi_, i) => {
+            if(campi_.codigo == req.params.codigo){
+                index = i;
+                existe = true;
+                campi = campi_;
+
+                // alunos = alunos.filter((aluno_) => {
+                //     return aluno_.campus == campi_.campi;
+                // });
+                // console.log(alunos);
+            } 
         });
-        alunos.splice(index, 1);
-        return res.send();
+
+        if(existe){
+            campis.splice(index, 1);
+            return res.json(campi);
+        } else if (existe == false) return res.status(404).send('Código não encontrado!');
+        return res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
 };
+
+module.exports.campis = campis;
