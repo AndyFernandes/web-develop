@@ -32,6 +32,7 @@ module.exports = {
     async store(req, res) {
         var aluno = req.body;
         var existe = false;
+        var achou_campi = false;
 
         var campis = require('./CampiController').campis;
         
@@ -46,19 +47,21 @@ module.exports = {
             if("nome" in aluno && "data_nasc" in aluno && "email" in aluno && "ddd" in aluno && "telefone" in aluno && "operadora" in aluno && "campus" in aluno && "curso" in aluno){
                 campis.forEach(campi => {
                     if(campi.campi == aluno.campus){
+                        achou_campi = true;
                         alunos.push(aluno);
                         return res.json(aluno);
                     }
                 });
-            }
+
+                if(achou_campi == false) res.status(400).send('Campus informado não está cadastrado...');
+            } else res.status(400).send('Campos não estão de acordo com o esperado...');
         }
         res.status(500).send('Aconteceu alguma coisa errada no servidor...');
     },
-
-   
     async update(req, res) {
         var aluno = req.body;
         var existe = false;
+        var achou_campi = false;
 
         var campis = require('./CampiController').campis;
         alunos.forEach((aluno_, i) => {
@@ -76,10 +79,13 @@ module.exports = {
                             alunos[i].curso = aluno.curso;
 
                             aluno = alunos[i];
-                            existe = true;   
+                            existe = true;  
+                            achou_campi = true; 
                         }
                     });
-                }
+                    
+                    if(achou_campi == false) res.status(400).send('Campus informado não está cadastrado...');
+                } else res.status(400).send('Campos não estão de acordo com o esperado...');
             }
         });
 

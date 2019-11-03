@@ -7,13 +7,6 @@ var campis = [
 ];
 
 
-// considerando que 1 campi é =
-// {
-//     "codigo":"",
-//     "campi":"",
-//     "cursos": ["curso1", "curso2", "curso3"]
-// }
-
 module.exports = {
     async index(req, res) {
         return res.json(campis);
@@ -46,6 +39,8 @@ module.exports = {
             if(campi.cursos.length >= 1){
                 campis.push(campi);
                 return res.json(campi);
+            } else {
+                res.status(400).send('Quantidade de cursos por campi deve ser maior igual a 1...');
             }
         }
         res.status(500).send('Aconteceu alguma coisa errada no servidor...');
@@ -86,8 +81,6 @@ module.exports = {
                 alunos.alunos.forEach((aluno_, index) => {
                     if(aluno_.campus == campi_.campi){
                         indexes.push(index);
-                        // alunos.alunos.splice(index, 1);
-                        // console.log(aluno_)
                     }
                 });
             } 
