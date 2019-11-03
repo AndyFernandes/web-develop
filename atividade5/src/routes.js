@@ -3,7 +3,7 @@ const routes = express.Router();
 const AlunoController = require('./controllers/AlunoController');
 const CampiController = require('./controllers/CampiController');
 
-routes.get('/alunos', AlunoController.index);
+routes.get('/alunos?', AlunoController.index);
 routes.get('/alunos/:matricula', AlunoController.show);
 routes.post('/alunos', AlunoController.store);
 routes.put('/alunos/:matricula', AlunoController.update);

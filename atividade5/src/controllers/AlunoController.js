@@ -14,7 +14,22 @@ var alunos = [];
 
 module.exports = {
     async index(req, res) {
-        return res.json(alunos);
+        var alunos_ = alunos.slice();
+        console.log(req.query);
+        if(req.query.campus){
+            alunos_ = alunos_.filter(aluno => (aluno.campus == req.query.campus));
+            console.log(alunos_);
+        }
+
+        if(req.query.curso){
+            alunos_ = alunos_.filter(aluno => (aluno.curso == req.query.curso));
+        }
+
+        if(req.query.min_data && req.query.max_data){
+            alunos_ = alunos_.filter(aluno => (aluno.data_nasc >= req.query.min_data && aluno.data_nasc <= req.query.max_data));
+        }
+
+        return res.json(alunos_);
     },
 
     async show(req, res) {
