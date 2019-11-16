@@ -45,11 +45,9 @@ module.exports = {
     async destroy(req, res) {    
         var campi = null;
         campi = await Campi.findByIdAndRemove(req.params.id);
-        // TODO: tratamento para retirar todos os alunos que pertencem a esse campi
-        console.log(campi);
-        // alunos = await Aluno.find({campus})
-
+        
         if(campi != null){
+            await Aluno.remove({"campus": req.params.id});
             return res.json(campi);
         } else if (campi == null) return res.status(404).send('Código não encontrado!');
         return res.status(500).send('Aconteceu alguma coisa errada no servidor...');
