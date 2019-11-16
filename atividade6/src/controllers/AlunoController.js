@@ -21,9 +21,14 @@ module.exports = {
     },
 
     async show(req, res) {
-        const aluno = await Aluno.findById(req.params.id);
-        if(aluno != null) return res.json(aluno);
-        else res.status(404).send('Alun não encontrada!');
+        
+        try {
+            const aluno = await Aluno.findById(req.params.id);
+            if(aluno != null) return res.json(aluno);
+            else res.status(404).send('Aluno não encontrado!');
+        } catch (e){
+            res.status(404).send("Código inválido!");
+        }
     },
 
     async store(req, res) {

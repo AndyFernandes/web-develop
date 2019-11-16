@@ -10,9 +10,13 @@ module.exports = {
     },
 
     async show(req, res) {
-        const campi = await Campi.findById(req.params.id);
-        if(campi != null) return res.json(campi);
-        else res.status(404).send('Campi não encontrado!');
+        try {
+            const campi = await Campi.findById(req.params.id);
+            if(campi != null) return res.json(campi);
+            else res.status(404).send('Campi não encontrado!');
+        } catch(e){
+            res.status(404).send("Código inválido!");
+        }
     },
 
     async store(req, res) {
