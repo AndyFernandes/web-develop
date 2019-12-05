@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Cadastro aluno</title>
+
+    <!-- CSSs -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="js/jquery.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container" id="app">
+        <div class="row">
+            <h1 class="col-9">Sistema de Controle de Alunos</h1>
+            <a href="#" onclick="autor()" class="float-right col-3"><img src="img/icone.png " id="autor_img"></a>
+        </div>
+
+        <span id="textoacima" class="d-block p-2 bg-primary text-white">Formulário de alunos</span>
+
+        <!-- FORMULARIO -->
+        <form ref="form" class="container border border-primary shadow-lg mb-5 bg-white rounded" method="">
+            <div class="row">
+                <div class="form-group col-4">
+                    <label for="matricula"><b>Matrícula</b></label>
+                    <input type="text" class="form-control" id="matricula" name="matricula" v-model="matricula" placeholder="Adicione a matrícula do aluno" minlength="6" maxlength="6" autofocus pattern="[0-9]{6}" required>
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="nome"><b>Nome</b></label>
+                    <input type="text" class="form-control" id="nome" v-model="nome" placeholder="Adicione o nome do aluno" minlength="3" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group  col-4">
+                    <label for="data_nasc"><b>Data de Nascimento</b></label>
+                    <input type="date" class="form-control" id="data_nasc" v-model="data_nasc" min="1925-01-01" max="2001-12-31" required>
+                </div>
+
+                <div class="form-group col-8">
+                    <label for="email"><b>Email</b></label>
+                    <input type="email" class="form-control" id="email" v-model="email" placeholder="Adicione o email do aluno" required>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="ddd"><b>DDD</b></label>
+                    <input type="text" class="form-control" id="ddd" v-model="ddd" placeholder="DDD" minlength="2" maxlength="2" pattern="[0-9]{2}" required>
+                </div>
+
+                <div class="form-group col-4">
+                    <label for="telefone"><b>Telefone</b></label>
+                    <input type="text" class="form-control" id="telefone" v-model="telefone" placeholder="Adicione o telefone do aluno" minlength="8" maxlength="9" pattern="[0-9]{8,9}" required>
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="operadoras"><b>Operadores</b></label>
+                    <select class="custom-select" id="operadoras" v-model="operadora" required>
+                          <option v-for="operadora in operadoras" :value="operadora"> {{ operadora }}</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="form-group col-2">
+                    <label for="campus"><b>Campus</b></label>
+                    <select class="custom-select" id="campus" v-model="campus" required>
+                        <option v-for="campi in campis" :value="campi">{{ campi }}</option>
+                                  <!-- <option value="Porangabussu">Porangabussu</option>
+                                  <option value="Benfica">Benfica</option> -->
+                  </select>
+                </div>
+
+                <div class="form-group col-2">
+                    <label for="curso"><b>Curso</b></label>
+                    <select class="custom-select" id="curso" v-model="curso" required>
+                        <option v-for="curso in campi_cursos[campus]" :value="curso">{{ curso }}</option>
+                                      <!-- <option value="Matemática">Matemática</option>
+                                      <option value="Geologia">Geologia</option> -->
+                  </select>
+                </div>
+            </div>
+
+            <div class="card-header row text-right">
+                <button type="button" class="btn btn-light float-right" v-on:click="limpar()">Limpar</a>
+                <button type="submit" class="btn btn-info float-right" id="submit_form" v-on:click="inserir(event)">Inserir</a>
+          </div>
+
+        </form>
+        <table-todo :alunos="alunos"></table-todo>
+    </div>
+
+
+    <!-- MODAL PRA REMOÇÃO -->
+    <div class="modal" tabindex="-1" role="dialog" id="remove">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitação de Confirmação</h5>
+                </div>
+
+                <div class="modal-body">
+                    <h1>Confirma exclusão?!</h1>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" id="confirmar">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <template id="table-todo">
+        <table class="table">
+            <thead>
+                <tr><th scope="col">Matricula</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr v-for="aluno in alunos">
+                    <td>{{ aluno.matricula }}</td>
+                    <td>{{ aluno.nome }}</td>
+                    <td>
+                        <button class = "btn btn-danger" :id="aluno.matricula" v-on:click="remover(aluno.matricula)" >Remover</button>
+                        <!-- <button class = "btn btn-danger" :id="aluno.matricula" v-on:click="alterar"> -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <!-- MODAL PRA MATRICULA REPETIDA -->
+    <div class="modal" tabindex="-1" role="dialog" id="matricula_repetida">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title">AVISO</h1>
+                </div>
+
+                <div class="modal-body">
+                    <h5>Essa matrícula já existe, por favor, tente novamente.</h5>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL PARA AUTOR -->
+    <div class="modal" tabindex="-1" role="dialog" id="autor">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Autor</h5>
+                </div>
+
+                <div class="modal-body row">
+                    <div class="col-4">
+                        <img class="rounded-circle img-thumbnail float-left" src="img/ddza.jpg ">
+                    </div>
+
+                    <div class="col-4">
+                        <p> EAIIIIIIIIIIIIIIIIIIIIIIIII</p>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" data-dismiss="modal">Fechar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- SCRIPTS -->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        //TODO:
+        // > Tabela: Alunos ordenados em ordem alfabetica
+
+        // var alunos = [];
+        const MAX_LENGTH_MATRICULA = 6;
+        const MAX_LENGTH_DDD = 2;
+        const MIN_LENGTH_NOME = 3;
+
+        // function get_index_aluno_by_matricula(matricula) {
+        //     alunos.forEach((aluno, index) => {
+        //         if (aluno.matricula == matricula) {
+        //             return index;
+        //         }
+        //     });
+        // }
+
+        // TODO: Botar a rota da remoção
+        // function confirmar_remocao(matricula) {
+        //     $("#remove").modal('hide');
+        //     var index = get_index_aluno_by_matricula(matricula);
+        //     alunos.splice(index, 1);
+        //     // axios.delete('localhost:3000/api/alunos/'+matricula)
+        // };
+
+        function autor() {
+          $("#autor").modal('show');
+        };
+
+        Vue.component('table-todo', {
+            template: "#table-todo",
+            props: ['alunos'],
+            methods: {
+                remover(matricula) {
+                    $('#remove').modal('show');
+                    document.getElementById('confirmar').setAttribute('onclick', 'confirmar_remocao(' + matricula + ')');
+                },
+                
+            }
+        });
+
+        function ordenar_alunos(aluno) {
+            function compare(a, b) {
+                let comparison = 0;
+                if (a.matricula > b.matricula) {
+                    comparison = 1;
+                } else if (a.matricula < b.matricula) {
+                    comparison = -1;
+                }
+                return comparison;
+            }
+            alunos.sort(compare);
+        };
+
+        var app = new Vue({
+            el: "#app",
+            data: {
+                url: "http://localhost:3000/api/alunos",
+                url_campi: "localhost:3000/api/campi",
+                alunos:[],
+                nome: "",
+                matricula: "",
+                data_nasc: "",
+                email: "",
+                ddd: "",
+                telefone: "",
+                operadora: "",
+                campus: "",
+                curso: "",
+                //alunos: alunos,
+                operadoras: ['Oi', 'Vivo', 'Tim', 'Claro'],
+                campis: ['Porangabussu', 'Pici', 'Benfica'],
+                campi_cursos: {
+                                 'Porangabussu': ['Medicina', 'Odontologia', 'Farmácia'],
+                                 'Pici': ['Computação', 'Matemática', 'Geologia', 'SMD', 'Engenharia de Computação'],
+                                 'Benfica': ['Letras', 'Filosofia', 'Direito']
+                             },
+            },
+            mounted() {
+                vm = this;
+                axios.get(this.url).then(function(msg){
+                    // console.log(msg);
+                    vm.alunos = msg.data;
+                }).catch(function(error){
+                    console.log(error);
+                });
+
+                axios.defaults.headers.post['Content-Type'] ='application/json;charset=utf-8';
+axios.defaults.headers.post['Access-Control-Allow-Origin'] = '*';
+
+                axios.get(this.url_campi).then(function(msg){
+                    console.log(msg);
+                }).catch(function(error){
+                    console.log(error);
+                })
+            },
+            methods: {
+                inserir() {
+                        // if(this.verificacao_duplicidade_matricula2() == "valido"){
+                            let alunoNovo = {
+                                'matricula': this.matricula,
+                                'nome': this.nome,
+                                'data_nasc': this.data_nasc,
+                                'email': this.email,
+                                'ddd': this.ddd,
+                                'telefone': this.telefone,
+                                'operadora': this.operadora,
+                                'campus': this.campus,
+                                'curso': this.curso};
+                                console.log(alunoNovo);
+                                axios.post(this.url, alunoNovo).then(function (dado) {
+                                    // window.location.replace("index.html");
+                                    alert("Matricula realizada com sucesso!");
+                                    alunos.push(dado)
+                                    console.log("ENTREI AQUI")
+                                    console.log(dado)
+                                }).catch(function (error) {
+                                    console.log("NAO DEU CERTO")
+                                    $('#matricula_repetida').modal('show');
+                                    console.log('Matricula ja existe');
+                                });
+                        // }                  
+                    },
+            //     ordenar_alunos(aluno) {
+            //         function compare(a, b) {
+            //             let comparison = 0;
+            //             if (a.matricula > b.matricula) {
+            //                 comparison = 1;
+            //             } else if (a.matricula < b.matricula) {
+            //                 comparison = -1;
+            //             }
+            //             return comparison;
+            //         }
+            //         this.alunos.sort(compare);
+            //     },
+            //     limpar() {
+            //         this.matricula = '';
+            //         this.nome = '';
+            //         this.data_nasc = '';
+            //         this.email = '';
+            //         this.ddd = '';
+            //         this.telefone = '';
+            //         this.operadora = '';
+            //         this.curso = '';
+            //         this.campus = '';
+            //     }, 
+            //     verificacao_duplicidade_matricula() {
+            //         this.alunos.forEach(aluno => {
+            //             if (aluno.matricula == this.matricula) {
+            //                 $("#matricula_repetida").modal('show');
+            //             }
+            //         });
+            //     },
+                verificacao_duplicidade_matricula2() {
+                    var retorno = "valido";
+                    this.alunos.forEach(aluno => {
+                        if (aluno.matricula == this.matricula) {
+                            retorno = "invalido";
+                        }
+                    });
+                    return retorno;
+                },
+            //     // TODO: Ajeitar pra rota do inserir e incluir o id em vez de matricula no id dele
+               
+            }
+        })
+    </script>
+</body>
+
+</html>
